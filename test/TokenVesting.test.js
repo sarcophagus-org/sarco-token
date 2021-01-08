@@ -121,51 +121,6 @@ describe('TokenVesting', function () {
       expect(await this.vesting.released(this.token.address)).to.be.bignumber.equal(amount);
     });
 
-    it('should be revoked by owner if revocable is set', async function () {
-      const { logs } = await this.vesting.revoke(this.token.address, { from: owner });
-      expectEvent.inLogs(logs, 'TokenVestingRevoked', { token: this.token.address });
-      expect(await this.vesting.revoked(this.token.address)).to.equal(true);
-    });
-
-    it('should fail to be revoked by owner if revocable not set', async function () {
-      const vesting = await TokenVesting.new(
-        beneficiary, this.start, this.cliffDuration, this.duration, false, { from: owner }
-      );
-
-      await expectRevert(vesting.revoke(this.token.address, { from: owner }),
-        'TokenVesting: cannot revoke'
-      );
-    });
-
-    it('should return the non-vested tokens when revoked by owner', async function () {
-      await time.increaseTo(this.start.add(this.cliffDuration).add(time.duration.weeks(12)));
-
-      const vested = vestedAmount(amount, await time.latest(), this.start, this.cliffDuration, this.duration);
-
-      await this.vesting.revoke(this.token.address, { from: owner });
-
-      expect(await this.token.balanceOf(owner)).to.be.bignumber.equal(amount.sub(vested));
-    });
-
-    it('should keep the vested tokens when revoked by owner', async function () {
-      await time.increaseTo(this.start.add(this.cliffDuration).add(time.duration.weeks(12)));
-
-      const vestedPre = vestedAmount(amount, await time.latest(), this.start, this.cliffDuration, this.duration);
-
-      await this.vesting.revoke(this.token.address, { from: owner });
-
-      const vestedPost = vestedAmount(amount, await time.latest(), this.start, this.cliffDuration, this.duration);
-
-      expect(vestedPre).to.be.bignumber.equal(vestedPost);
-    });
-
-    it('should fail to be revoked a second time', async function () {
-      await this.vesting.revoke(this.token.address, { from: owner });
-      await expectRevert(this.vesting.revoke(this.token.address, { from: owner }),
-        'TokenVesting: token already revoked'
-      );
-    });
-
     function vestedAmount (total, now, start, cliffDuration, duration) {
       return (now.lt(start.add(cliffDuration))) ? new BN(0) : total.mul((now.sub(start))).div(duration);
     }
