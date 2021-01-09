@@ -40,7 +40,7 @@ contract TokenVesting {
      * @param start the time (as Unix time) at which point vesting starts
      * @param duration duration in seconds of the period in which the tokens will vest
      */
-    constructor (address[] memory beneficiaries, uint256[] memory amounts, uint256 start, uint256 duration) public {
+    constructor (address[] memory beneficiaries, uint256[] memory amounts, uint256 start, uint256 duration, IERC20 token) public {
         require(duration > 0, "TokenVesting: duration is 0");
         require(start.add(duration) > block.timestamp, "TokenVesting: final time is before current time");
 
@@ -54,10 +54,6 @@ contract TokenVesting {
 
         _duration = duration;
         _start = start;
-    }
-
-    function setToken(IERC20 token) public {
-        require(address(_token) == address(0), "TokenVesting: _token is not the zero address");
         _token = token;
     }
 
@@ -97,11 +93,18 @@ contract TokenVesting {
     }
 
     /**
+     * @return the amount of tokens which can be claimed by a beneficiary.
+     */
+    function releasableAmount(address beneficiary) public view returns (uint256) {
+        return _vestedAmount(beneficiary).sub(_releasedTokens[beneficiary]);
+    }
+
+    /**
      * @notice Transfers vested tokens to beneficiary.
      * @param beneficiary beneficiary to receive the funds
      */
     function release(address beneficiary) public {
-        uint256 unreleased = _releasableAmount(beneficiary);
+        uint256 unreleased = releasableAmount(beneficiary);
 
         require(unreleased > 0, "TokenVesting: no tokens are due");
 
@@ -110,14 +113,6 @@ contract TokenVesting {
         _token.safeTransfer(beneficiary, unreleased);
 
         emit TokensReleased(address(_token), beneficiary, unreleased);
-    }
-
-    /**
-     * @dev Calculates the amount that has already vested but hasn't been released yet.
-     * @param beneficiary beneficiary address to check
-     */
-    function _releasableAmount(address beneficiary) private view returns (uint256) {
-        return _vestedAmount(beneficiary).sub(_releasedTokens[beneficiary]);
     }
 
     /**

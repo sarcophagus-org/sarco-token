@@ -19,21 +19,21 @@ contract('TokenVesting', accounts => {
 
   it('reverts with a null beneficiary', async function () {
     await expectRevert(
-      TokenVesting.new([ZERO_ADDRESS], [0], this.start, this.duration, { from: owner }),
+      TokenVesting.new([ZERO_ADDRESS], [0], this.start, this.duration, ZERO_ADDRESS, { from: owner }),
       'TokenVesting: beneficiary is the zero address'
     );
   });
 
   it('reverts with a null amount', async function () {
     await expectRevert(
-      TokenVesting.new([beneficiary], [0], this.start, this.duration, { from: owner }),
+      TokenVesting.new([beneficiary], [0], this.start, this.duration, ZERO_ADDRESS, { from: owner }),
       'TokenVesting: amount is zero'
     );
   });
 
   it('reverts with a null duration', async function () {
     await expectRevert(
-      TokenVesting.new([beneficiary], [amount], this.start, 0, { from: owner }),
+      TokenVesting.new([beneficiary], [amount], this.start, 0, ZERO_ADDRESS, { from: owner }),
       'TokenVesting: duration is 0'
     );
   });
@@ -43,18 +43,17 @@ contract('TokenVesting', accounts => {
 
     this.start = now.sub(this.duration).sub(time.duration.minutes(1));
     await expectRevert(
-      TokenVesting.new([beneficiary], [amount], this.start, this.duration, { from: owner }),
+      TokenVesting.new([beneficiary], [amount], this.start, this.duration, ZERO_ADDRESS, { from: owner }),
       'TokenVesting: final time is before current time'
     );
   });
 
   context('once deployed', function () {
     beforeEach(async function () {
-      this.vesting = await TokenVesting.new(
-        [beneficiary], [amount], this.start, this.duration, { from: owner });
-
       this.token = await ERC20Mintable.new({ from: owner });
-      await this.vesting.setToken(this.token.address)
+      this.vesting = await TokenVesting.new(
+        [beneficiary], [amount], this.start, this.duration, this.token.address, { from: owner });
+
       await this.token.mint(this.vesting.address, amount, { from: owner });
     });
 
