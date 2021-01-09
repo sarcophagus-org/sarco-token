@@ -31,7 +31,7 @@ contract Distributor {
             _distributed[recipient] = true;
 
             if (vest) {
-                TokenVesting vesting = new TokenVesting(recipient, block.timestamp, 0, 365 days * 2);
+                TokenVesting vesting = new TokenVesting(recipient, block.timestamp, 365 days * 2);
                 vestings[recipient] = vesting;
                 token.transfer(address(vesting), amount);
             } else {

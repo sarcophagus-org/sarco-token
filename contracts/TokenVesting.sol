@@ -25,7 +25,6 @@ contract TokenVesting {
     address private _beneficiary;
 
     // Durations and timestamps are expressed in UNIX time, the same units as block.timestamp.
-    uint256 private _cliff;
     uint256 private _start;
     uint256 private _duration;
 
@@ -36,19 +35,16 @@ contract TokenVesting {
      * beneficiary, gradually in a linear fashion until start + duration. By then all
      * of the balance will have vested.
      * @param beneficiary address of the beneficiary to whom vested tokens are transferred
-     * @param cliffDuration duration in seconds of the cliff in which tokens will begin to vest
      * @param start the time (as Unix time) at which point vesting starts
      * @param duration duration in seconds of the period in which the tokens will vest
      */
-    constructor (address beneficiary, uint256 start, uint256 cliffDuration, uint256 duration) public {
+    constructor (address beneficiary, uint256 start, uint256 duration) public {
         require(beneficiary != address(0), "TokenVesting: beneficiary is the zero address");
-        require(cliffDuration <= duration, "TokenVesting: cliff is longer than duration");
         require(duration > 0, "TokenVesting: duration is 0");
         require(start.add(duration) > block.timestamp, "TokenVesting: final time is before current time");
 
         _beneficiary = beneficiary;
         _duration = duration;
-        _cliff = start.add(cliffDuration);
         _start = start;
     }
 
@@ -57,13 +53,6 @@ contract TokenVesting {
      */
     function beneficiary() public view returns (address) {
         return _beneficiary;
-    }
-
-    /**
-     * @return the cliff time of the token vesting.
-     */
-    function cliff() public view returns (uint256) {
-        return _cliff;
     }
 
     /**
@@ -119,9 +108,7 @@ contract TokenVesting {
         uint256 currentBalance = token.balanceOf(address(this));
         uint256 totalBalance = currentBalance.add(_released[address(token)]);
 
-        if (block.timestamp < _cliff) {
-            return 0;
-        } else if (block.timestamp >= _start.add(_duration)) {
+        if (block.timestamp >= _start.add(_duration)) {
             return totalBalance;
         } else {
             return totalBalance.mul(block.timestamp.sub(_start)).div(_duration);

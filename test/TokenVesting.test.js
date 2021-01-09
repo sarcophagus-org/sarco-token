@@ -16,33 +16,19 @@ describe('TokenVesting', function () {
   beforeEach(async function () {
     // +1 minute so it starts after contract instantiation
     this.start = (await time.latest()).add(time.duration.minutes(1));
-    this.cliffDuration = time.duration.years(1);
     this.duration = time.duration.years(2);
-  });
-
-  it('reverts with a duration shorter than the cliff', async function () {
-    const cliffDuration = this.duration;
-    const duration = this.cliffDuration;
-
-    expect(cliffDuration).to.be.bignumber.that.is.at.least(duration);
-
-    await expectRevert(
-      TokenVesting.new(beneficiary, this.start, cliffDuration, duration, true, { from: owner }),
-      'TokenVesting: cliff is longer than duration'
-    );
   });
 
   it('reverts with a null beneficiary', async function () {
     await expectRevert(
-      TokenVesting.new(ZERO_ADDRESS, this.start, this.cliffDuration, this.duration, true, { from: owner }),
+      TokenVesting.new(ZERO_ADDRESS, this.start, this.duration, { from: owner }),
       'TokenVesting: beneficiary is the zero address'
     );
   });
 
   it('reverts with a null duration', async function () {
-    // cliffDuration should also be 0, since the duration must be larger than the cliff
     await expectRevert(
-      TokenVesting.new(beneficiary, this.start, 0, 0, true, { from: owner }), 'TokenVesting: duration is 0'
+      TokenVesting.new(beneficiary, this.start, 0, { from: owner }), 'TokenVesting: duration is 0'
     );
   });
 
@@ -51,7 +37,7 @@ describe('TokenVesting', function () {
 
     this.start = now.sub(this.duration).sub(time.duration.minutes(1));
     await expectRevert(
-      TokenVesting.new(beneficiary, this.start, this.cliffDuration, this.duration, true, { from: owner }),
+      TokenVesting.new(beneficiary, this.start, this.duration, { from: owner }),
       'TokenVesting: final time is before current time'
     );
   });
@@ -59,7 +45,7 @@ describe('TokenVesting', function () {
   context('once deployed', function () {
     beforeEach(async function () {
       this.vesting = await TokenVesting.new(
-        beneficiary, this.start, this.cliffDuration, this.duration, true, { from: owner });
+        beneficiary, this.start, this.duration, { from: owner });
 
       this.token = await ERC20Mintable.new({ from: owner });
       await this.token.mint(this.vesting.address, amount, { from: owner });
@@ -67,20 +53,12 @@ describe('TokenVesting', function () {
 
     it('can get state', async function () {
       expect(await this.vesting.beneficiary()).to.equal(beneficiary);
-      expect(await this.vesting.cliff()).to.be.bignumber.equal(this.start.add(this.cliffDuration));
       expect(await this.vesting.start()).to.be.bignumber.equal(this.start);
       expect(await this.vesting.duration()).to.be.bignumber.equal(this.duration);
-      expect(await this.vesting.revocable()).to.be.equal(true);
     });
 
-    it('cannot be released before cliff', async function () {
-      await expectRevert(this.vesting.release(this.token.address),
-        'TokenVesting: no tokens are due'
-      );
-    });
-
-    it('can be released after cliff', async function () {
-      await time.increaseTo(this.start.add(this.cliffDuration).add(time.duration.weeks(1)));
+    it('can be released', async function () {
+      await time.increaseTo(this.start.add(time.duration.weeks(1)));
       const { logs } = await this.vesting.release(this.token.address);
       expectEvent.inLogs(logs, 'TokensReleased', {
         token: this.token.address,
@@ -88,8 +66,8 @@ describe('TokenVesting', function () {
       });
     });
 
-    it('should release proper amount after cliff', async function () {
-      await time.increaseTo(this.start.add(this.cliffDuration));
+    it('should release proper amount', async function () {
+      await time.increaseTo(this.start.add(time.duration.weeks(1)));
 
       await this.vesting.release(this.token.address);
       const releaseTime = await time.latest();
@@ -100,11 +78,11 @@ describe('TokenVesting', function () {
     });
 
     it('should linearly release tokens during vesting period', async function () {
-      const vestingPeriod = this.duration.sub(this.cliffDuration);
+      const vestingPeriod = this.duration;
       const checkpoints = 4;
 
       for (let i = 1; i <= checkpoints; i++) {
-        const now = this.start.add(this.cliffDuration).add((vestingPeriod.muln(i).divn(checkpoints)));
+        const now = this.start.add((vestingPeriod.muln(i).divn(checkpoints)));
         await time.increaseTo(now);
 
         await this.vesting.release(this.token.address);
@@ -120,10 +98,6 @@ describe('TokenVesting', function () {
       expect(await this.token.balanceOf(beneficiary)).to.be.bignumber.equal(amount);
       expect(await this.vesting.released(this.token.address)).to.be.bignumber.equal(amount);
     });
-
-    function vestedAmount (total, now, start, cliffDuration, duration) {
-      return (now.lt(start.add(cliffDuration))) ? new BN(0) : total.mul((now.sub(start))).div(duration);
-    }
   });
 });
  
