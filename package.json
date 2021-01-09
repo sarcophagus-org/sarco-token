@@ -6,7 +6,7 @@
     "test": "truffle test"
   },
   "author": "Adam Gall <adam@decentlabs.io>",
-  "license": "Unlicense",
+  "license": "MIT",
   "devDependencies": {
     "@openzeppelin/contracts": "^3.3.0",
     "@openzeppelin/test-helpers": "^0.5.10",
