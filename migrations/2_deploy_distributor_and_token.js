@@ -42,5 +42,9 @@ module.exports = function (deployer) {
     .deploy(Distributor, recipients, amounts, vests)
     .then(() => deployer.deploy(Sarco, Distributor.address))
     .then(() => Distributor.deployed())
-    .then(d => d.distribute(Sarco.address))
+    .then(d => Promise.all([
+      d.distribute(Sarco.address, 0, 10),
+      d.distribute(Sarco.address, 10, 10),
+      d.distribute(Sarco.address, 20, 9),
+    ]))
 }
