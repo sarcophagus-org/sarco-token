@@ -7,36 +7,39 @@ import "./TokenVesting.sol";
 contract Distributor {
     address[] private _recipients;
     uint256[] private _amounts;
-    bool[] private _vests;
 
-    mapping(address => bool) private _distributed;
-    mapping(address => TokenVesting) public vestings;
+    address[] private _vestRecipients;
+    uint256[] private _vestAmounts;
 
-    constructor(address[] memory recipients_, uint256[] memory amounts_, bool[] memory vests_) public {
+    TokenVesting public vesting;
+    
+    constructor(
+        address[] memory recipients_, uint256[] memory amounts_,
+        address[] memory vestRecipients_, uint256[] memory vestAmounts_
+    ) public {
         require(recipients_.length == amounts_.length, "Distributor::constructor: recipients_ length must equal amounts_ length");
-        require(amounts_.length == vests_.length, "Distributor::constructor: amounts_ length must equal vests_ length");
+        require(vestRecipients_.length == vestAmounts_.length, "Distributor::constructor: vestRecipients_ length must equal vestAmounts_ length");
 
         _recipients = recipients_;
         _amounts = amounts_;
-        _vests = vests_;
+
+        _vestRecipients = vestRecipients_;
+        _vestAmounts = vestAmounts_;
     }
 
-    function distribute(IERC20 token, uint8 startIndex, uint8 length) public {
-        for (uint i = startIndex; i < startIndex + length; i++) {
-            address recipient = _recipients[i];
-            uint256 amount = _amounts[i] * 10**18;
-            bool vest = _vests[i];
-
-            require(!_distributed[recipient], "Distributor::distribute: already distributed recipient");
-            _distributed[recipient] = true;
-
-            if (vest) {
-                TokenVesting vesting = new TokenVesting(recipient, block.timestamp, 365 days * 2);
-                vestings[recipient] = vesting;
-                token.transfer(address(vesting), amount);
-            } else {
-                token.transfer(recipient, amount);
-            }
+    function distribute(IERC20 token, uint256 duration) public {
+        for (uint i = 0; i < _recipients.length; i++) {
+            token.transfer(_recipients[i], _amounts[i]);
         }
+
+        uint256 vestTotal;
+        for (uint i = 0; i < _vestAmounts.length; i++) {
+            vestTotal += _vestAmounts[i];
+        }
+        require(token.balanceOf(address(this)) == vestTotal, "Distributor::distribute: calculated vest total not equal to distributor balance");
+
+        vesting = new TokenVesting(_vestRecipients, _vestAmounts, block.timestamp, duration);
+        vesting.setToken(token);
+        token.transfer(address(vesting), vestTotal);
     }
 }

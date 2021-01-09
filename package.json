@@ -1,18 +1,17 @@
 {
   "name": "sarco-token",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Sarcophagus SARCO ERC20 Token",
   "scripts": {
-    "test": "truffle compile && truffle test"
+    "test": "truffle test"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Adam Gall <adam@decentlabs.io>",
+  "license": "Unlicense",
   "devDependencies": {
     "@openzeppelin/contracts": "^3.3.0",
-    "@openzeppelin/test-environment": "^0.1.9",
     "@openzeppelin/test-helpers": "^0.5.10",
-    "chai": "^4.2.0",
+    "@truffle/hdwallet-provider": "^1.2.1",
+    "dotenv": "^8.2.0",
     "truffle": "^5.1.60"
   }
 }
