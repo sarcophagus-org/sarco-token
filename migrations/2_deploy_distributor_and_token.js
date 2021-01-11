@@ -12,7 +12,7 @@ module.exports = function (deployer, network) {
       { recipient: "0x77e879A426a9f49349E2BBAb4E8b91dD3F23084E", amount: 2000000 },
       { recipient: "0x15160128D2152ddB01365b60Fd1cEc1876845e63", amount: 1000000 },
     ]
-  
+
     vest = [
       { recipient: "0x244265a76901b8030B140A2996e6Dd4703cbF20f", amount: 3199996 },
       { recipient: "0x4A0A927043B01a7fB175BCa4F4837e3b817C5e6b", amount: 2720000 },
@@ -40,7 +40,7 @@ module.exports = function (deployer, network) {
       { recipient: "0x7FcAE73Cec08fAF89f318A55fcDa1706eEE8407F", amount: 66667 },
     ]
 
-    start = 1610632800
+    start = 1610496000 // Jan 13 2021 00:00:00 GMT
     duration = 60 * 60 * 24 * 365 * 2 // 2 years
   } else {
     immediate = [
