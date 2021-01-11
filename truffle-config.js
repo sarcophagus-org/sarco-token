@@ -3,6 +3,13 @@ const HDWalletProvider = require('@truffle/hdwallet-provider')
 
 module.exports = {
   networks: {
+    mainnet: {
+      provider: () => new HDWalletProvider({
+        privateKeys: [process.env.MAINNET_PK],
+        providerOrUrl: process.env.MAINNET_PROVIDER
+      }),
+      network_id: '1',
+    },
     goerli: {
       provider: () => new HDWalletProvider({
         privateKeys: [process.env.GOERLI_PK],
