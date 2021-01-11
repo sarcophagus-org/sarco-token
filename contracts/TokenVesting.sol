@@ -43,7 +43,6 @@ contract TokenVesting {
     constructor (address[] memory beneficiaries, uint256[] memory amounts, uint256 start, uint256 duration, IERC20 token) public {
         require(duration > 0, "TokenVesting: duration is 0");
         require(start.add(duration) > block.timestamp, "TokenVesting: final time is before current time");
-
         require(beneficiaries.length == amounts.length, "TokenVesting: beneficiaries length is not equal to amounts length");
 
         for (uint i = 0; i < beneficiaries.length; i++) {
@@ -105,13 +104,9 @@ contract TokenVesting {
      */
     function release(address beneficiary) public {
         uint256 unreleased = releasableAmount(beneficiary);
-
         require(unreleased > 0, "TokenVesting: no tokens are due");
-
         _releasedTokens[beneficiary] = _releasedTokens[beneficiary].add(unreleased);
-
         _token.safeTransfer(beneficiary, unreleased);
-
         emit TokensReleased(address(_token), beneficiary, unreleased);
     }
 
@@ -120,11 +115,12 @@ contract TokenVesting {
      * @param beneficiary beneficiary address to check
      */
     function _vestedAmount(address beneficiary) private view returns (uint256) {
-        if (block.timestamp >= _start.add(_duration)) {
+        if (block.timestamp < _start) {
+            return 0;
+        } else if (block.timestamp >= _start.add(_duration)) {
             return _totalTokens[beneficiary];
         } else {
             return _totalTokens[beneficiary].mul(block.timestamp.sub(_start)).div(_duration);
         }
     }
 }
- 

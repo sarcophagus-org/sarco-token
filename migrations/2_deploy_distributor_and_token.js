@@ -2,7 +2,7 @@ const Distributor = artifacts.require("Distributor")
 const Sarco = artifacts.require("Sarco")
 
 module.exports = function (deployer, network) {
-  let immediate, vest, duration
+  let immediate, vest, start, duration
 
   if (['mainnet', 'mainnet-fork'].includes(network)) {
     immediate = [
@@ -40,6 +40,7 @@ module.exports = function (deployer, network) {
       { recipient: "0x7FcAE73Cec08fAF89f318A55fcDa1706eEE8407F", amount: 66667 },
     ]
 
+    start = 1610632800
     duration = 60 * 60 * 24 * 365 * 2 // 2 years
   } else {
     immediate = [
@@ -77,6 +78,7 @@ module.exports = function (deployer, network) {
       { recipient: "0x288c57908cb8a7b03fa9873993dc57389b5ff8af", amount: 66667 },
     ]
 
+    start = Math.floor(Date.now() / 1000) + 300
     duration = 60 * 10 // 10 minutes
   }
 
@@ -96,5 +98,5 @@ module.exports = function (deployer, network) {
     .deploy(Distributor, immediateRecipients, immediateAmounts, vestRecipients, vestAmounts)
     .then(() => deployer.deploy(Sarco, Distributor.address))
     .then(() => Distributor.deployed())
-    .then(d => d.distribute(Sarco.address, duration))
+    .then(d => d.distribute(Sarco.address, start, duration))
 }

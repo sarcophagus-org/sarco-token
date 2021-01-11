@@ -67,9 +67,10 @@ contract Distributor {
      * @notice Distributes tokens to immediate recipients,
      * creates a new TokenVesting contract, and sends the tokens to-be-vested to that contract
      * @param token the ERC20 token which to operate on
+     * @param start the time at which tokens start to vest
      * @param duration the TokenVesting duration
      */
-    function distribute(IERC20 token, uint256 duration) public {
+    function distribute(IERC20 token, uint256 start, uint256 duration) public {
         // Only callable one tine
         require(_distributed == false, "Distributor::distribute: _distributed is true");
         _distributed = true;
@@ -89,7 +90,7 @@ contract Distributor {
         }
 
         // Create new TokenVesting contract which will be shared between all vesting addresses, send tokens to it
-        _vesting = new TokenVesting(_vestRecipients, _vestAmounts, block.timestamp, duration, token);
+        _vesting = new TokenVesting(_vestRecipients, _vestAmounts, start, duration, token);
         token.transfer(address(_vesting), vestTotal);
 
         // Sanity check
