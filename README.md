@@ -10,7 +10,7 @@ This repository contains the smart contracts necessary for the creation, distrib
 ## Distribution
 SARCO tokens will be distributed amongst the Sarcophagus DAO, the Builders of Sarcophagus, and to support the bond incentive, grant, and liquidity mining programs.
 
-![token distribtuion](token_distribution.png "Token Distribution")
+![token distribution](token_distribution.png "Token Distribution")
 
 Distribution Breakdown:
 | Entity               | Holdings     | Vesting in months |
