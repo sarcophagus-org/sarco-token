@@ -10,7 +10,7 @@ This repository contains the smart contracts necessary for the creation, distrib
 ## Distribution
 SARCO tokens will be distributed amongst the Sarcophagus DAO, the Builders of Sarcophagus, and to support the bond incentive, grant, and liquidity mining programs.
 
-![token distribution](token_distribution.png "Token Distribution")
+![token distribution](static/token_distribution.png "Token Distribution")
 
 Distribution Breakdown:
 | Entity               | Holdings     | Vesting in months |
@@ -25,7 +25,7 @@ Distribution Breakdown:
 ## Vesting Schedule
 The vesting schedule for the builders tokens is linear, per second, for two years, and applies equally to all builders. No VC or other exceptions. This contract can be found [here](https://github.com/sarcophagus-org/sarco-token/blob/master/contracts/TokenVesting.sol).
 
-![vesting schedule](vesting_schedule.png "Vesting Schedule")
+![vesting schedule](static/vesting_schedule.png "Vesting Schedule")
 
 Both the bond incentive and liquidity mining allocations are vested over the course of one year as a virtue of the structure of their respective contracts, separate from the builder vesting contract. The liquidity mining contract can be found [here](https://github.com/sarcophagus-org/liquidity-mining/blob/master/contracts/LiquidityMining.sol).
 
