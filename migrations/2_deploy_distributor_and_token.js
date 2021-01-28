@@ -42,6 +42,16 @@ module.exports = function (deployer, network) {
 
     start = 1610496000 // Jan 13 2021 00:00:00 GMT
     duration = 60 * 60 * 24 * 365 * 2 // 2 years
+  }
+  else if (['goerli', 'goerli-fork'].includes(network)) {
+    immediate = [
+      { recipient: "0xfcf7a2794D066110162ADdcE3085dfd6221D4ddD", amount: 100000000 }
+    ]
+    vest = []
+
+    // these need to be set, but aren't being used because no vesting addresses
+    start = Math.floor(Date.now() / 1000) + 300
+    duration = 60 * 10
   } else {
     immediate = [
       { recipient: "0xa59f129e85fbb545f274055c286eb6dfc77e1230", amount: 60000000 },
