@@ -43,7 +43,7 @@ module.exports = function (deployer, network) {
     start = 1610496000 // Jan 13 2021 00:00:00 GMT
     duration = 60 * 60 * 24 * 365 * 2 // 2 years
   }
-  else if (['goerli', 'goerli-fork'].includes(network)) {
+  else if (['goerli', 'goerli-fork', 'rinkeby', 'rinkeby-fork'].includes(network)) {
     immediate = [
       { recipient: "0xfcf7a2794D066110162ADdcE3085dfd6221D4ddD", amount: 100000000 }
     ]

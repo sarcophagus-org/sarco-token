@@ -10,6 +10,13 @@ module.exports = {
       }),
       network_id: '1',
     },
+    rinkeby: {
+      provider: () => new HDWalletProvider({
+        privateKeys: [process.env.RINKEBY_PK],
+        providerOrUrl: process.env.RINKEBY_PROVIDER
+      }),
+      network_id: '4'
+    },
     goerli: {
       provider: () => new HDWalletProvider({
         privateKeys: [process.env.GOERLI_PK],
