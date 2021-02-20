@@ -1,0 +1,219 @@
+{
+  "manifestVersion": "3.1",
+  "impls": {
+    "cf96c5be50780087f47a15ee09b81ab28afe3fc24f1e7cd82ec6116ce9e694aa": {
+      "address": "0x2f9A1382a959c916361E2223fC9d3195cfcb8e08",
+      "txHash": "0xe630563af8ec400a1deb5e158c60886c9355e03ce3c860a8d4ad8647efea0023",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:25"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:30"
+          },
+          {
+            "contract": "SarcoStaking",
+            "label": "sarcoToken",
+            "type": "t_contract(IERC20)3406",
+            "src": "SarcoStaking.sol:12"
+          },
+          {
+            "contract": "SarcoStaking",
+            "label": "stakeValue",
+            "type": "t_mapping(t_address,t_uint256)",
+            "src": "SarcoStaking.sol:19"
+          },
+          {
+            "contract": "SarcoStaking",
+            "label": "stakeValueHistory",
+            "type": "t_mapping(t_address,t_array(t_struct(Checkpoint)279_storage)dyn_storage)",
+            "src": "SarcoStaking.sol:20"
+          },
+          {
+            "contract": "SarcoStaking",
+            "label": "totalStaked",
+            "type": "t_uint256",
+            "src": "SarcoStaking.sol:22"
+          },
+          {
+            "contract": "SarcoStaking",
+            "label": "totalStakers",
+            "type": "t_uint256",
+            "src": "SarcoStaking.sol:23"
+          },
+          {
+            "contract": "SarcoStaking",
+            "label": "totalStakedHistory",
+            "type": "t_array(t_struct(Checkpoint)279_storage)dyn_storage",
+            "src": "SarcoStaking.sol:24"
+          }
+        ],
+        "types": {
+          "t_contract(IERC20)3406": {
+            "label": "contract IERC20"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_address,t_array(t_struct(Checkpoint)279_storage)dyn_storage)": {
+            "label": "mapping(address => struct SarcoStaking.Checkpoint[])"
+          },
+          "t_array(t_struct(Checkpoint)279_storage)dyn_storage": {
+            "label": "struct SarcoStaking.Checkpoint[]"
+          },
+          "t_struct(Checkpoint)279_storage": {
+            "label": "struct SarcoStaking.Checkpoint",
+            "members": [
+              {
+                "label": "fromBlock",
+                "type": "t_uint128"
+              },
+              {
+                "label": "value",
+                "type": "t_uint128"
+              }
+            ]
+          },
+          "t_uint128": {
+            "label": "uint128"
+          },
+          "t_bool": {
+            "label": "bool"
+          }
+        }
+      }
+    },
+    "65689641b1156ee19144619c955fc3c398bf08a3df6d8b900f335fa7d974c713": {
+      "address": "0x01f8228C5708136a9b87FED504545fA6F6C280E4",
+      "txHash": "0x0d2415fdaaea97817ba6ebb113ed66950aa88389d35f2f05b3169a53baa4307b",
+      "layout": {
+        "storage": [
+          {
+            "contract": "Initializable",
+            "label": "_initialized",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:25"
+          },
+          {
+            "contract": "Initializable",
+            "label": "_initializing",
+            "type": "t_bool",
+            "src": "../@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:30"
+          },
+          {
+            "contract": "ContextUpgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)50_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "_balances",
+            "type": "t_mapping(t_address,t_uint256)",
+            "src": "../@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol:37"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "_allowances",
+            "type": "t_mapping(t_address,t_mapping(t_address,t_uint256))",
+            "src": "../@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol:39"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "_totalSupply",
+            "type": "t_uint256",
+            "src": "../@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol:41"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "_name",
+            "type": "t_string_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol:43"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "_symbol",
+            "type": "t_string_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol:44"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "_decimals",
+            "type": "t_uint8",
+            "src": "../@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol:45"
+          },
+          {
+            "contract": "ERC20Upgradeable",
+            "label": "__gap",
+            "type": "t_array(t_uint256)44_storage",
+            "src": "../@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol:312"
+          },
+          {
+            "contract": "SarcoVotingRights",
+            "label": "sarcoStaking",
+            "type": "t_contract(SarcoStaking)804",
+            "src": "SarcoVotingRights.sol:10"
+          },
+          {
+            "contract": "SarcoVotingRights",
+            "label": "sarco",
+            "type": "t_contract(Sarco)262",
+            "src": "SarcoVotingRights.sol:11"
+          }
+        ],
+        "types": {
+          "t_contract(SarcoStaking)804": {
+            "label": "contract SarcoStaking"
+          },
+          "t_contract(Sarco)262": {
+            "label": "contract Sarco"
+          },
+          "t_mapping(t_address,t_uint256)": {
+            "label": "mapping(address => uint256)"
+          },
+          "t_address": {
+            "label": "address"
+          },
+          "t_uint256": {
+            "label": "uint256"
+          },
+          "t_mapping(t_address,t_mapping(t_address,t_uint256))": {
+            "label": "mapping(address => mapping(address => uint256))"
+          },
+          "t_string_storage": {
+            "label": "string"
+          },
+          "t_uint8": {
+            "label": "uint8"
+          },
+          "t_array(t_uint256)44_storage": {
+            "label": "uint256[44]"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]"
+          },
+          "t_bool": {
+            "label": "bool"
+          }
+        }
+      }
+    }
+  },
+  "admin": {
+    "address": "0xf0e9e9f08e85a0a9fd93C264e8ba37851597B314",
+    "txHash": "0x52de9ec8084fc0bda3b0c425ceb22b39915de0db411166bdda7081c671e867db"
+  }
+}
