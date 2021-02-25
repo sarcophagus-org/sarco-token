@@ -21,23 +21,35 @@ contract SarcoVotingRights is Initializable, ERC20Upgradeable {
         sarco = _sarco;
     }
 
-    function balanceOf(address _owner) public view override returns (uint256) {
+    function balanceOf(address _owner)
+        public
+        view
+        virtual
+        override
+        returns (uint256)
+    {
         return sarcoStaking.stakeValue(_owner);
     }
 
-    function totalSupply() public view override returns (uint256) {
+    function totalSupply() public view virtual override returns (uint256) {
         return sarcoStaking.totalStaked();
     }
 
     function balanceOfAt(address _owner, uint256 _blockNumber)
         public
         view
+        virtual
         returns (uint256)
     {
         return sarcoStaking.stakeValueAt(_owner, _blockNumber);
     }
 
-    function totalSupplyAt(uint256 _blockNumber) public view returns (uint256) {
+    function totalSupplyAt(uint256 _blockNumber)
+        public
+        view
+        virtual
+        returns (uint256)
+    {
         return sarcoStaking.totalStakedAt(_blockNumber);
     }
 
