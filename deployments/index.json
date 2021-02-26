@@ -5,13 +5,13 @@
     "Distributor": "0x4ACb7EE4d08F138ceAE97C2Ce23c27dF262D00fF",
     "TokenVesting": "0xe79a907147055fbc9dee9f337c5746271b045122",
     
-    "SarcoStakingProxy": "",
-    "SarcoStaking": "",
+    "SarcoStakingProxy": "0xBD53450702A341F356d609d76044DB8a06E200B3",
+    "SarcoStaking": "0x7820F875876e6A95632149ae1E7e18ea4B4e308C",
 
-    "SarcoVotingRightsProxy": "",
-    "SarcoVotingRights": "",
+    "SarcoVotingRightsProxy": "0xFB6A34a73Fd8Ea586f8afb82685F4e9A4080f1E8",
+    "SarcoVotingRights": "0x7650679E2FB1F8361D3Cf2d32d69E025085463d1",
 
-    "ProxyAdmin": ""
+    "ProxyAdmin": "0x470260F12967C838CF32fE0d18d919d09fAC57dc"
   },
   "4": {
     "Migrations": "0x8E64e5958dCC89d8AB1dEfB7374a49533b9ABB8C",
@@ -33,12 +33,12 @@
     "Distributor": "0x551af8174Db9d075312f8A5b6d291685FAb1aD72",
     "TokenVesting": "0xe2EDBD32966E56F36D4be1d757dB045d9D12A81b",
     
-    "SarcoStakingProxy": "",
-    "SarcoStaking": "",
+    "SarcoStakingProxy": "0x4e3ecb41Bba7adBe6040aB38991e7E077e8a2565",
+    "SarcoStaking": "0xbf6C08Fa9A3cBF410A84B3B849dFf656D8F7B1b2",
 
-    "SarcoVotingRightsProxy": "",
-    "SarcoVotingRights": "",
+    "SarcoVotingRightsProxy": "0x22183179aF73F0F5864bde163cad058e8a37930f",
+    "SarcoVotingRights": "0x52a08FEaEC1f88F6CdE51eF5Fd7BD2458dD793e3",
 
-    "ProxyAdmin": ""
+    "ProxyAdmin": "0x5700B617A826E3F74Ee208F230Aa33b8670a1DB4"
   }
 }
