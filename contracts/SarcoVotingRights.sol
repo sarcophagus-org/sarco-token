@@ -8,6 +8,8 @@ import "./Sarco.sol";
 
 contract SarcoVotingRights is Initializable, ERC20Upgradeable {
     SarcoStaking public sarcoStaking;
+    
+    // unused, oops, but leave it because of upgradability concerns
     Sarco public sarco;
 
     function initialize(
