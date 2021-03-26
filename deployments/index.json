@@ -4,13 +4,14 @@
     "Sarco": "0x7697B462A7c4Ff5F8b55BDBC2F4076c2aF9cF51A",
     "Distributor": "0x4ACb7EE4d08F138ceAE97C2Ce23c27dF262D00fF",
     "TokenVesting": "0xe79a907147055fbc9dee9f337c5746271b045122",
-    
-    "SarcoStakingProxy": "0xBD53450702A341F356d609d76044DB8a06E200B3",
-    "SarcoStaking": "0x7820F875876e6A95632149ae1E7e18ea4B4e308C",
-
-    "SarcoVotingRightsProxy": "0xFB6A34a73Fd8Ea586f8afb82685F4e9A4080f1E8",
-    "SarcoVotingRights": "0x7650679E2FB1F8361D3Cf2d32d69E025085463d1",
-
+    "SarcoStaking": {
+      "proxy": "0xBD53450702A341F356d609d76044DB8a06E200B3",
+      "implementation": "0x7820F875876e6A95632149ae1E7e18ea4B4e308C"
+    },
+    "SarcoVotingRights": {
+      "proxy": "0xFB6A34a73Fd8Ea586f8afb82685F4e9A4080f1E8",
+      "implementation": "0x7650679E2FB1F8361D3Cf2d32d69E025085463d1"
+    },
     "ProxyAdmin": "0x470260F12967C838CF32fE0d18d919d09fAC57dc"
   },
   "4": {
@@ -18,13 +19,14 @@
     "Sarco": "0x77Ec161f6C2F2ce4554695A07e071d3f0eF3aef5",
     "Distributor": "0x0fc344caDCeF9C225cd1E05d2f5c772E99B00d2f",
     "TokenVesting": "0x30e2341554Bfce3897326E74B7c3e886322b2e68",
-    
-    "SarcoStakingProxy": "0xbfc81983fd813d72dC289Ea86c5e08B61cF7EbB8",
-    "SarcoStaking": "0x1510dfA9b50fB7F14695E9Ea41AAB1Cb1afd3DE5",
-
-    "SarcoVotingRightsProxy": "0xee70B92dCC35fcEfB2d51fC1ad08Ae2611439CBa",
-    "SarcoVotingRights": "0xF9D8606f596c685404330B8Ef2f53e2c3B0D65b9",
-
+    "SarcoStaking": {
+      "proxy": "0xbfc81983fd813d72dC289Ea86c5e08B61cF7EbB8",
+      "implementation": "0x1510dfA9b50fB7F14695E9Ea41AAB1Cb1afd3DE5"
+    },
+    "SarcoVotingRights": {
+      "proxy": "0xee70B92dCC35fcEfB2d51fC1ad08Ae2611439CBa",
+      "implementation": "0xF9D8606f596c685404330B8Ef2f53e2c3B0D65b9"
+    },
     "ProxyAdmin": "0x5E4c3eF39e2E1335cE3F1B24e48A2E0E433Bd09e"
   },
   "5": {
@@ -32,13 +34,14 @@
     "Sarco": "0x4633b43990b41B57b3678c6F3Ac35bA75C3D8436",
     "Distributor": "0x551af8174Db9d075312f8A5b6d291685FAb1aD72",
     "TokenVesting": "0xe2EDBD32966E56F36D4be1d757dB045d9D12A81b",
-    
-    "SarcoStakingProxy": "0x4e3ecb41Bba7adBe6040aB38991e7E077e8a2565",
-    "SarcoStaking": "0xbf6C08Fa9A3cBF410A84B3B849dFf656D8F7B1b2",
-
-    "SarcoVotingRightsProxy": "0x22183179aF73F0F5864bde163cad058e8a37930f",
-    "SarcoVotingRights": "0x52a08FEaEC1f88F6CdE51eF5Fd7BD2458dD793e3",
-
+    "SarcoStaking": {
+      "proxy": "0x4e3ecb41Bba7adBe6040aB38991e7E077e8a2565",
+      "implementation": "0xbf6C08Fa9A3cBF410A84B3B849dFf656D8F7B1b2"
+    },
+    "SarcoVotingRights": {
+      "proxy": "0x22183179aF73F0F5864bde163cad058e8a37930f",
+      "implementation": "0x52a08FEaEC1f88F6CdE51eF5Fd7BD2458dD793e3"
+    },
     "ProxyAdmin": "0x5700B617A826E3F74Ee208F230Aa33b8670a1DB4"
   }
 }
