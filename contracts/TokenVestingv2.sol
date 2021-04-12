@@ -38,6 +38,8 @@ contract TokenVestingv2 {
      * @dev Creates a vesting contract that vests its balance of any ERC20 token to the
      * beneficiary, gradually in a linear fashion until start + duration. By then all
      * of the balance will have vested.
+     * @dev transfers erc20 token to vesting contract to allow the vesting contract to release 
+     * tokens at the end of the vesting schedule.
      * @param _beneficiary addresses of the beneficiaries to whom vested tokens are transferred
      * @param _tokensToVest amounts of tokens for the beneficiaries
      * @param _vestDuration duration in seconds of the period in which the tokens will vest
@@ -49,10 +51,16 @@ contract TokenVestingv2 {
         require(getInvestorCreated(_tokenAddress, _beneficiary) != true, "_beneficiary already created for this token");
         require(_beneficiary != address(0), "TokenVestingv2: beneficiary is the zero address");
         require(_tokensToVest != 0, 'TokenVestingv2: amount is zero');
-        investment memory newInvestment = investment(_tokensToVest, 0, block.timestamp, _vestDuration, true);
-        _tokenVest[_tokenAddress][_beneficiary] = newInvestment;
         
-        emit VestStarted(_tokenAddress, _beneficiary, _tokensToVest);
+        uint256 beforeBalance = _tokenAddress.balanceOf(address(this));
+        _tokenAddress.safeTransferFrom(msg.sender, address(this), _tokensToVest);
+        uint256 afterBalance = _tokenAddress.balanceOf(address(this));
+        uint256 resultBalalnce = afterBalance.sub(beforeBalance);
+
+        investment memory newInvestment = investment(resultBalalnce, 0, block.timestamp, _vestDuration, true);
+        _tokenVest[_tokenAddress][_beneficiary] = newInvestment;        
+
+        emit VestStarted(_tokenAddress, _beneficiary, resultBalalnce);
     }
 
      /**

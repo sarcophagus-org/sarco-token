@@ -10,10 +10,13 @@ contract('TokenVestingv2', accounts => {
   const [ owner, beneficiary ] = accounts;
 
   const amount = new BN('1000');
+  const mintamount = new BN('20000');
 
   beforeEach(async function () {
     this.vestingv2 = await TokenVestingv2.new({ from: owner })
     this.token = await ERC20Mintable.new({ from: owner });
+    await this.token.mint(owner, mintamount, { from: owner });
+    await this.token.approve(this.vestingv2.address,amount, { from: owner });
     this.duration = time.duration.years(2);
   });
 
@@ -39,11 +42,16 @@ contract('TokenVestingv2', accounts => {
   });
 
   it('reverts with a duplicate investor', async function () {
-    await this.vestingv2.startVest(beneficiary, amount, this.duration, this.token.address, { from: owner })
+    await this.vestingv2.startVest(beneficiary, amount, this.duration, this.token.address, { from: owner });
     await expectRevert(
       this.vestingv2.startVest(beneficiary, amount, this.duration, this.token.address, { from: owner }),
       "_beneficiary already created for this token"
     );
+  });
+
+  it('transfers tokens to contract address', async function () {
+    await this.vestingv2.startVest(beneficiary, amount, this.duration, this.token.address, { from: owner });
+    expect(await this.token.balanceOf(this.vestingv2.address)).to.be.bignumber.that.equals(amount);
   });
 
   context('once vest is started', function () {
@@ -51,6 +59,9 @@ contract('TokenVestingv2', accounts => {
       this.token = await ERC20Mintable.new({ from: owner });
       this.vestingv2 = await TokenVestingv2.new({ from: owner });
       this.duration = time.duration.years(2);
+
+      await this.token.mint(owner, mintamount, { from: owner });
+      await this.token.approve(this.vestingv2.address,mintamount, { from: owner });
 
       await this.token.mint(this.vestingv2.address, amount, { from: owner });
 
