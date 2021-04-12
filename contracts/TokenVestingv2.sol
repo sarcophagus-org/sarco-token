@@ -23,7 +23,7 @@ contract TokenVestingv2 {
     event TokensReleased(IERC20 token, address beneficiary, uint256 amount);
     event VestStarted(IERC20 token, address beneficiary, uint256 amount);
 
-    struct investment {
+    struct Investment {
         uint256 _totalTokens;
         uint256 _releasedTokens;
         uint256 _start;
@@ -32,7 +32,7 @@ contract TokenVestingv2 {
     }
 
     //data mapping for token contract
-    mapping (IERC20 => mapping (address =>  investment)) public _tokenVest;
+    mapping (IERC20 => mapping (address =>  Investment)) public tokenVest;
 
     /**
      * @dev Creates a vesting contract that vests its balance of any ERC20 token to the
@@ -57,8 +57,8 @@ contract TokenVestingv2 {
         uint256 afterBalance = _tokenAddress.balanceOf(address(this));
         uint256 resultBalalnce = afterBalance.sub(beforeBalance);
 
-        investment memory newInvestment = investment(resultBalalnce, 0, block.timestamp, _vestDuration, true);
-        _tokenVest[_tokenAddress][_beneficiary] = newInvestment;        
+        Investment memory newInvestment = Investment(resultBalalnce, 0, block.timestamp, _vestDuration, true);
+        tokenVest[_tokenAddress][_beneficiary] = newInvestment;        
 
         emit VestStarted(_tokenAddress, _beneficiary, resultBalalnce);
     }
@@ -67,28 +67,28 @@ contract TokenVestingv2 {
      * @return the start time of the token vesting.
      */
     function getStart(IERC20 token, address beneficiary) public view returns (uint256) {
-        return _tokenVest[token][beneficiary]._start;
+        return tokenVest[token][beneficiary]._start;
     }
     
     /**
      * @return the total tokens of the token vesting.
      */
     function getTotalTokens(IERC20 token, address beneficiary) public view returns (uint256) {
-        return _tokenVest[token][beneficiary]._totalTokens;
+        return tokenVest[token][beneficiary]._totalTokens;
     }
 
     /**
      * @return the duration of the token vesting.
      */
     function getDuration(IERC20 token, address beneficiary) public view returns (uint256) {
-        return _tokenVest[token][beneficiary]._duration;
+        return tokenVest[token][beneficiary]._duration;
     }
 
     /**
      * @return the duration of the token vesting.
      */
     function getInvestorCreated(IERC20 token, address beneficiary) public view returns (bool) {
-        return _tokenVest[token][beneficiary]._investorAddressCreated;
+        return tokenVest[token][beneficiary]._investorAddressCreated;
     }
 
 
@@ -96,14 +96,14 @@ contract TokenVestingv2 {
      * @return the amount of the token released.
      */
     function getReleasedTokens(IERC20 token, address beneficiary) public view returns (uint256) {
-        return _tokenVest[token][beneficiary]._releasedTokens;
+        return tokenVest[token][beneficiary]._releasedTokens;
     }
 
     /**
      * @return the amount of tokens which can be claimed by a beneficiary.
      */
     function getReleasableAmount(IERC20 token, address beneficiary) public view returns (uint256) {
-        return _vestedAmount(token, beneficiary).sub(getReleasedTokens(token, beneficiary));
+        return totalVestedAmount(token, beneficiary).sub(getReleasedTokens(token, beneficiary));
     }
 
     /**
@@ -114,7 +114,7 @@ contract TokenVestingv2 {
     function release(IERC20 token, address beneficiary) public {
         uint256 unreleased = getReleasableAmount(token, beneficiary);
         require(unreleased > 0, "TokenVesting: no tokens are due");
-        _tokenVest[token][beneficiary]._releasedTokens = _tokenVest[token][beneficiary]._releasedTokens.add(unreleased);
+        tokenVest[token][beneficiary]._releasedTokens = tokenVest[token][beneficiary]._releasedTokens.add(unreleased);
         token.safeTransfer(beneficiary, unreleased);
         emit TokensReleased(token, beneficiary, unreleased);
     }
@@ -124,7 +124,7 @@ contract TokenVestingv2 {
      * @param beneficiary beneficiary address to check
      * @param token address of the token vested
      */
-    function _vestedAmount(IERC20 token, address beneficiary) private view returns (uint256) {
+    function totalVestedAmount(IERC20 token, address beneficiary) public view returns (uint256) {
         uint256 _startTime = getStart(token, beneficiary);
         uint256 _durationTime = getDuration(token, beneficiary);
         if (block.timestamp < _startTime) {

@@ -54,7 +54,7 @@ contract('TokenVestingv2', accounts => {
     expect(await this.token.balanceOf(this.vestingv2.address)).to.be.bignumber.that.equals(amount);
   });
 
-  context('once vest is started', function () {
+  context('once vest has started', function () {
     beforeEach(async function () {
       this.token = await ERC20Mintable.new({ from: owner });
       this.vestingv2 = await TokenVestingv2.new({ from: owner });
