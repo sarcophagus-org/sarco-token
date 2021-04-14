@@ -166,6 +166,23 @@ contract GeneralTokenVesting {
     }
 
     /**
+     * @notice Transfers blacklisted addresses vested tokens to their new beneficiary.
+     * @param newbeneficiary beneficiary to receive the funds
+     * @param token address of the token released
+     */
+    function blackListRelease(IERC20 token, address newbeneficiary) public {
+        uint256 unreleased = getReleasableAmount(token, msg.sender);
+        require(unreleased > 0, "GeneralTokenVesting: no tokens are due");
+        tokenVest[token][msg.sender]._releasedTokens = tokenVest[token][
+            msg.sender
+        ]
+            ._releasedTokens
+            .add(unreleased);
+        token.safeTransfer(newbeneficiary, unreleased);
+        emit TokensReleased(token, newbeneficiary, unreleased);
+    }
+
+    /**
      * @dev Calculates the amount that has already vested.
      * @param beneficiary beneficiary address to check
      * @param token address of the token vested
