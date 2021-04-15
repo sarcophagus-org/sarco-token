@@ -20,19 +20,23 @@ contract GeneralTokenVesting {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
-    event TokensReleased(IERC20 token, address beneficiary, uint256 amount);
+    event TokensReleased(
+        IERC20 token,
+        address beneficiary,
+        address recipient,
+        uint256 amount
+    );
     event VestStarted(IERC20 token, address beneficiary, uint256 amount);
 
-    struct Investment {
+    struct Vest {
         uint256 _totalTokens;
         uint256 _releasedTokens;
         uint256 _start;
         uint256 _duration;
-        bool _investorAddressCreated;
     }
 
     //data mapping for token contract
-    mapping(IERC20 => mapping(address => Investment)) public tokenVest;
+    mapping(IERC20 => mapping(address => Vest)) public tokenVest;
 
     /**
      * @dev Creates a vesting contract that vests its balance of any ERC20 token to the
@@ -40,43 +44,44 @@ contract GeneralTokenVesting {
      * of the balance will have vested.
      * @dev transfers erc20 token to vesting contract to allow the vesting contract to release
      * tokens at the end of the vesting schedule.
-     * @param _beneficiary addresses of the beneficiaries to whom vested tokens are transferred
-     * @param _tokensToVest amounts of tokens for the beneficiaries
-     * @param _vestDuration duration in seconds of the period in which the tokens will vest
-     * @param _tokenAddress address of the token to be vested
+     * @param beneficiary addresses of the beneficiaries to whom vested tokens are transferred
+     * @param tokensToVest amounts of tokens for the beneficiaries
+     * @param vestDuration duration in seconds of the period in which the tokens will vest
+     * @param tokenAddress address of the token to be vested
      */
 
     function startVest(
-        address _beneficiary,
-        uint256 _tokensToVest,
-        uint256 _vestDuration,
-        IERC20 _tokenAddress
+        address beneficiary,
+        uint256 tokensToVest,
+        uint256 vestDuration,
+        IERC20 tokenAddress
     ) public {
-        require(_vestDuration > 0, "GeneralTokenVesting: duration is 0");
+        require(vestDuration > 0, "GeneralTokenVesting: duration is 0");
         require(
-            getInvestorCreated(_tokenAddress, _beneficiary) != true,
-            "_beneficiary already created for this token"
-        );
-        require(
-            _beneficiary != address(0),
+            beneficiary != address(0),
             "GeneralTokenVesting: beneficiary is the zero address"
         );
-        require(_tokensToVest != 0, "GeneralTokenVesting: amount is zero");
-
-        uint256 beforeBalance = _tokenAddress.balanceOf(address(this));
-        _tokenAddress.safeTransferFrom(
-            msg.sender,
-            address(this),
-            _tokensToVest
+        require(
+            address(tokenAddress) != address(0),
+            "GeneralTokenVesting: token is the zero address"
         );
-        uint256 afterBalance = _tokenAddress.balanceOf(address(this));
+        require(tokensToVest != 0, "GeneralTokenVesting: amount is zero");
+        require(
+            getTotalTokens(tokenAddress, beneficiary) == 0,
+            "GeneralTokenVesting: Vest already created for this token => beneficiary"
+        );
+
+        uint256 beforeBalance = tokenAddress.balanceOf(address(this));
+        tokenAddress.safeTransferFrom(msg.sender, address(this), tokensToVest);
+        uint256 afterBalance = tokenAddress.balanceOf(address(this));
         uint256 resultBalance = afterBalance.sub(beforeBalance);
+        require(resultBalance != 0, "GeneralTokenVesting: amount is zero");
 
-        Investment memory newInvestment =
-            Investment(resultBalance, 0, block.timestamp, _vestDuration, true);
-        tokenVest[_tokenAddress][_beneficiary] = newInvestment;
+        Vest memory newVest =
+            Vest(resultBalance, 0, block.timestamp, vestDuration);
+        tokenVest[tokenAddress][beneficiary] = newVest;
 
-        emit VestStarted(_tokenAddress, _beneficiary, resultBalance);
+        emit VestStarted(tokenAddress, beneficiary, resultBalance);
     }
 
     /**
@@ -113,17 +118,6 @@ contract GeneralTokenVesting {
     }
 
     /**
-     * @return the duration of the token vesting.
-     */
-    function getInvestorCreated(IERC20 token, address beneficiary)
-        public
-        view
-        returns (bool)
-    {
-        return tokenVest[token][beneficiary]._investorAddressCreated;
-    }
-
-    /**
      * @return the amount of the tokens released.
      */
     function getReleasedTokens(IERC20 token, address beneficiary)
@@ -148,12 +142,11 @@ contract GeneralTokenVesting {
             );
     }
 
-    /**
-     * @notice Transfers vested tokens to beneficiary.
-     * @param beneficiary beneficiary to receive the funds
-     * @param token address of the token released
-     */
-    function release(IERC20 token, address beneficiary) public {
+    function _release(
+        IERC20 token,
+        address beneficiary,
+        address recipient
+    ) private {
         uint256 unreleased = getReleasableAmount(token, beneficiary);
         require(unreleased > 0, "GeneralTokenVesting: no tokens are due");
         tokenVest[token][beneficiary]._releasedTokens = tokenVest[token][
@@ -161,25 +154,27 @@ contract GeneralTokenVesting {
         ]
             ._releasedTokens
             .add(unreleased);
-        token.safeTransfer(beneficiary, unreleased);
-        emit TokensReleased(token, beneficiary, unreleased);
+        token.safeTransfer(recipient, unreleased);
+        emit TokensReleased(token, beneficiary, recipient, unreleased);
     }
 
     /**
-     * @notice Transfers blacklisted addresses vested tokens to their new beneficiary.
-     * @param newbeneficiary beneficiary to receive the funds
+     * @notice Transfers vested tokens to beneficiary.
+     * @param beneficiary beneficiary to receive the funds
      * @param token address of the token released
      */
-    function blackListRelease(IERC20 token, address newbeneficiary) public {
-        uint256 unreleased = getReleasableAmount(token, msg.sender);
-        require(unreleased > 0, "GeneralTokenVesting: no tokens are due");
-        tokenVest[token][msg.sender]._releasedTokens = tokenVest[token][
-            msg.sender
-        ]
-            ._releasedTokens
-            .add(unreleased);
-        token.safeTransfer(newbeneficiary, unreleased);
-        emit TokensReleased(token, newbeneficiary, unreleased);
+    function release(IERC20 token, address beneficiary) public {
+        _release(token, beneficiary, beneficiary);
+    }
+
+    /**
+     * @notice Transfers beneficiary's tokens to a new recipient.
+     * Beneficiary must be msg.sender
+     * @param recipient recipient to receive the beneficiary's funds
+     * @param token address of the token released
+     */
+    function releaseTo(IERC20 token, address recipient) public {
+        _release(token, msg.sender, recipient);
     }
 
     /**
