@@ -141,7 +141,12 @@ contract GeneralTokenVesting {
                 getReleasedTokens(token, beneficiary)
             );
     }
-
+    /**
+     * @notice Transfers vested tokens to beneficiary.
+     * @param beneficiary beneficiary to receive the funds
+     * @param token address of the token released
+     * Private used by release/releaseTo functions
+     */
     function _release(
         IERC20 token,
         address beneficiary,
