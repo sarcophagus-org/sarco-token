@@ -24,6 +24,20 @@ module.exports = {
       }),
       network_id: '5'
     },
+    ropsten: {
+      provider: () => new HDWalletProvider({
+        privateKeys: [process.env.ROPSTEN_PK],
+        providerOrUrl: process.env.ROPSTEN_PROVIDER
+      }),
+      network_id: '3',
+      gas: 4000000
+    },
+
+    ganache: {
+        host: "127.0.0.1",
+        port: 7545,
+        network_id: "*" // Match any network id
+    },
   },
   compilers: {
     solc: {

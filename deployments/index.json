@@ -12,7 +12,8 @@
       "proxy": "0xFB6A34a73Fd8Ea586f8afb82685F4e9A4080f1E8",
       "implementation": "0x7650679E2FB1F8361D3Cf2d32d69E025085463d1"
     },
-    "ProxyAdmin": "0x470260F12967C838CF32fE0d18d919d09fAC57dc"
+    "ProxyAdmin": "0x470260F12967C838CF32fE0d18d919d09fAC57dc",
+    "GeneralTokenVesting": "0x8727c592f28f10b42eb0914a7f6a5885823794c0"
   },
   "4": {
     "Migrations": "0x8E64e5958dCC89d8AB1dEfB7374a49533b9ABB8C",
@@ -27,7 +28,8 @@
       "proxy": "0xee70B92dCC35fcEfB2d51fC1ad08Ae2611439CBa",
       "implementation": "0xF9D8606f596c685404330B8Ef2f53e2c3B0D65b9"
     },
-    "ProxyAdmin": "0x5E4c3eF39e2E1335cE3F1B24e48A2E0E433Bd09e"
+    "ProxyAdmin": "0x5E4c3eF39e2E1335cE3F1B24e48A2E0E433Bd09e",
+    "GeneralTokenVesting": "0x3c29a378639ac47471DBE84E230Eba3104809Ac3"
   },
   "5": {
     "Migrations": "0xf728B6fc9E7e32AC35b1449B7f8F18c905BF5A45",
@@ -42,6 +44,7 @@
       "proxy": "0x22183179aF73F0F5864bde163cad058e8a37930f",
       "implementation": "0x52a08FEaEC1f88F6CdE51eF5Fd7BD2458dD793e3"
     },
-    "ProxyAdmin": "0x5700B617A826E3F74Ee208F230Aa33b8670a1DB4"
+    "ProxyAdmin": "0x5700B617A826E3F74Ee208F230Aa33b8670a1DB4",
+    "GeneralTokenVesting": "0x645fb6f59Fa191Eb5ED71BBDe77d9136a221F7A5"
   }
 }
