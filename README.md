@@ -29,7 +29,7 @@ The vesting schedule for the builders tokens is linear, per second, for two year
 
 ![vesting schedule](static/vesting_schedule.png "Vesting Schedule")
 
-Both the bond incentive and liquidity mining allocations are vested over the course of one year as a virtue of the structure of their respective contracts, separate from the builder vesting contract. The liquidity mining contract can be found [here](https://github.com/sarcophagus-org/liquidity-mining/blob/master/contracts/LiquidityMining.sol).
+Both the bond incentive and liquidity mining allocations are vested over the course of one year as a virtue of the structure of their respective contracts, separate from the builder vesting contract. The liquidity mining contract can be found [here](https://github.com/sarcophagus-org/sarcophagus-liquidity-mining/blob/master/contracts/LiquidityMining2.sol).
 
 ## Community
 [![Discord](https://img.shields.io/discord/753398645507883099?color=768AD4&label=discord)](https://discord.com/channels/753398645507883099/)
